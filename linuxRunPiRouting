@@ -1,0 +1,2 @@
+$NDDSHOME/bin/rtiroutingservice -cfgFile pi_server_routing_config.xml -cfgName PulseWis 
+

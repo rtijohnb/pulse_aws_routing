@@ -46,7 +46,7 @@
                             </element>
                             <element>
                                 <name>dds.transport.TCPv4.tcp1.public_address</name>
-                                <value>50.18.214.8:9900</value>
+                                <value>34.237.206.143:9900</value>
                             </element>
                             <element>
                                 <name>dds.transport.TCPv4.tcp1.server_bind_port</name>

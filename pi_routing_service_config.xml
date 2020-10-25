@@ -33,7 +33,7 @@
                 <participant_qos>
                     <discovery>
                         <initial_peers>
-                            <element>tcpv4_wan://50.18.214.8:9900</element>
+                            <element>tcpv4_wan://34.237.206.143:9900</element>
                         </initial_peers>
                     </discovery>
                     <discovery_config>

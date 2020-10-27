@@ -33,7 +33,7 @@
                 <participant_qos>
                     <discovery>
                         <initial_peers>
-                            <element>tcpv4_wan://34.237.206.143:9900</element>
+                            <element>tcpv4_wan://50.18.214.8:9900</element>
                         </initial_peers>
                     </discovery>
                     <discovery_config>
@@ -95,7 +95,11 @@
                     <input participant="WanParticipant">
                         <allow_topic_name_filter>PatientConfigTopic</allow_topic_name_filter>
                         <datareader_qos>
-						<!-- !!!ToDo: add QoS later -->
+                            <history>
+                                <kind>KEEP_LAST_HISTORY_QOS</kind>
+                                <depth>6</depth>
+                            </history>
+						    <!-- !!!ToDo: update as required -->
                         </datareader_qos>
                     </input>
                     <output participant="LocalParticipant">
@@ -108,11 +112,18 @@
                     <input participant="LocalParticipant">
                         <allow_topic_name_filter>PatientPulseTopic,PatientInfoTopic</allow_topic_name_filter>
                         <datareader_qos>
-						<!-- !!!ToDo: add QoS later -->
+                            <history>
+                                <kind>KEEP_LAST_HISTORY_QOS</kind>
+                                <depth>6</depth>
+                            </history>
+						    <!-- !!!ToDo: update as required -->
                         </datareader_qos>
                     </input>
                     <output participant="WanParticipant">
                         <allow_topic_name_filter>PatientPulseTopic,PatientInfoTopic</allow_topic_name_filter>
+						<datawriter_qos>
+ 						    <!-- !!!ToDo: update as required; this is going to the TCP tunnel so probably not much needed? -->
+						</datawriter_qos>
                     </output>
                 </auto_topic_route>
                 

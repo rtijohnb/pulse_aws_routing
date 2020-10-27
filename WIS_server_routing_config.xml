@@ -46,7 +46,7 @@
                             </element>
                             <element>
                                 <name>dds.transport.TCPv4.tcp1.public_address</name>
-                                <value>34.237.206.143:9900</value>
+                                <value>50.18.214.8:9900</value>
                             </element>
                             <element>
                                 <name>dds.transport.TCPv4.tcp1.server_bind_port</name>
@@ -72,7 +72,11 @@
                     <input participant="LocalParticipant">
                         <allow_topic_name_filter>PatientConfigTopic</allow_topic_name_filter>
                         <datareader_qos>
-						<!-- !!!ToDo: add QoS later -->
+                            <history>
+                                <kind>KEEP_LAST_HISTORY_QOS</kind>
+                                <depth>6</depth>
+                            </history>
+						    <!-- !!!ToDo: update as required -->
                         </datareader_qos>
                     </input>
                     <output participant="WanParticipant">
@@ -85,13 +89,17 @@
                     <input participant="WanParticipant">
                         <allow_topic_name_filter>PatientPulseTopic,PatientInfoTopic</allow_topic_name_filter>
                         <datareader_qos>
-						<!-- !!!ToDo: add QoS later -->
+						<!-- !!!ToDo: update as required; this is coming from the TCP tunnel so probably not much needed? -->
                         </datareader_qos>
                     </input>
                     <output participant="LocalParticipant">
                         <allow_topic_name_filter>PatientPulseTopic,PatientInfoTopic</allow_topic_name_filter>
                         <datawriter_qos>
-						<!-- !!!ToDo: add QoS later -->
+                            <history>
+                                <kind>KEEP_LAST_HISTORY_QOS</kind>
+                                <depth>6</depth>
+                            </history>
+						    <!-- !!!ToDo: update as required -->
                         </datawriter_qos>
                     </output>
                 </auto_topic_route>

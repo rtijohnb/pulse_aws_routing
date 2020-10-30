@@ -67,37 +67,88 @@
 
             <session name="Session" enabled="true">
 
-                <auto_topic_route name="ForwardToPi" enabled="true">
+                <auto_topic_route name="ForwardConfigToPi" enabled="true">
                     <publish_with_original_info>true</publish_with_original_info>                    
                     <input participant="LocalParticipant">
                         <allow_topic_name_filter>PatientConfigTopic</allow_topic_name_filter>
                         <datareader_qos>
+							<reliability>
+								<kind>RELIABLE_RELIABILITY_QOS</kind>
+							</reliability>
                             <history>
                                 <kind>KEEP_LAST_HISTORY_QOS</kind>
-                                <depth>6</depth>
+                                <depth>5</depth>
                             </history>
 						    <!-- !!!ToDo: update as required -->
                         </datareader_qos>
                     </input>
                     <output participant="WanParticipant">
                         <allow_topic_name_filter>PatientConfigTopic</allow_topic_name_filter>
+						<datawriter_qos>
+							<reliability>
+								<kind>RELIABLE_RELIABILITY_QOS</kind>
+							</reliability>
+                            <history>
+                                <kind>KEEP_LAST_HISTORY_QOS</kind>
+                                <depth>5</depth>
+                            </history>
+						</datawriter_qos>
                     </output>
                 </auto_topic_route>
 
-                <auto_topic_route name="ForwardFromPi" enabled="true">
+                <auto_topic_route name="ForwardPulseFromPi" enabled="true">
                     <publish_with_original_info>true</publish_with_original_info>
                     <input participant="WanParticipant">
-                        <allow_topic_name_filter>PatientPulseTopic,PatientInfoTopic</allow_topic_name_filter>
+                        <allow_topic_name_filter>PatientPulseTopic</allow_topic_name_filter>
                         <datareader_qos>
+							<reliability>
+								<kind>RELIABLE_RELIABILITY_QOS</kind>
+							</reliability>
+                            <history>
+                                <kind>KEEP_LAST_HISTORY_QOS</kind>
+                                <depth>100</depth>
+                            </history>
 						<!-- !!!ToDo: update as required; this is coming from the TCP tunnel so probably not much needed? -->
                         </datareader_qos>
                     </input>
                     <output participant="LocalParticipant">
-                        <allow_topic_name_filter>PatientPulseTopic,PatientInfoTopic</allow_topic_name_filter>
+                        <allow_topic_name_filter>PatientPulseTopic</allow_topic_name_filter>
                         <datawriter_qos>
+							<reliability>
+								<kind>RELIABLE_RELIABILITY_QOS</kind>
+							</reliability>
                             <history>
                                 <kind>KEEP_LAST_HISTORY_QOS</kind>
-                                <depth>6</depth>
+                                <depth>100</depth>
+                            </history>
+						    <!-- !!!ToDo: update as required -->
+                        </datawriter_qos>
+                    </output>
+                </auto_topic_route>
+				
+                <auto_topic_route name="ForwardInfoFromPi" enabled="true">
+                    <input participant="WanParticipant">
+                        <allow_topic_name_filter>PatientInfoTopic</allow_topic_name_filter>
+                        <datareader_qos>
+							<reliability>
+								<kind>RELIABLE_RELIABILITY_QOS</kind>
+							</reliability>
+                            <history>
+                                <kind>KEEP_LAST_HISTORY_QOS</kind>
+                                <depth>2</depth>
+                            </history>
+						<!-- !!!ToDo: update as required; this is coming from the TCP tunnel so probably not much needed? -->
+                        </datareader_qos>
+                    </input>
+                    <output participant="LocalParticipant">
+                        <allow_topic_name_filter>PatientInfoTopic</allow_topic_name_filter>
+                        <datawriter_qos>
+							<reliability>
+								<kind>RELIABLE_RELIABILITY_QOS</kind>
+							</reliability>
+                            <history>
+                                <kind>KEEP_LAST_HISTORY_QOS</kind>
+                                <depth>2</depth>
                             </history>
 						    <!-- !!!ToDo: update as required -->
                         </datawriter_qos>

@@ -95,27 +95,27 @@
                     <input participant="WanParticipant">
                         <allow_topic_name_filter>PatientConfigTopic</allow_topic_name_filter>
                         <datareader_qos>
-							<reliability>
-								<kind>RELIABLE_RELIABILITY_QOS</kind>
-							</reliability>
+                            <reliability>
+                                <kind>RELIABLE_RELIABILITY_QOS</kind>
+                            </reliability>
                             <history>
                                 <kind>KEEP_LAST_HISTORY_QOS</kind>
                                 <depth>5</depth>
                             </history>
-						    <!-- !!!ToDo: update as required -->
+                            <!-- ToDo: update as required -->
                         </datareader_qos>
                     </input>
                     <output participant="LocalParticipant">
                         <allow_topic_name_filter>PatientConfigTopic</allow_topic_name_filter>
-						<datawriter_qos>
-							<reliability>
-								<kind>RELIABLE_RELIABILITY_QOS</kind>
-							</reliability>
+                        <datawriter_qos>
+                            <reliability>
+                                <kind>RELIABLE_RELIABILITY_QOS</kind>
+                            </reliability>
                             <history>
                                 <kind>KEEP_LAST_HISTORY_QOS</kind>
                                 <depth>5</depth>
                             </history>
-						</datawriter_qos>
+                        </datawriter_qos>
                     </output>
                 </auto_topic_route>
 
@@ -124,28 +124,28 @@
                     <input participant="LocalParticipant">
                         <allow_topic_name_filter>PatientPulseTopic</allow_topic_name_filter>
                         <datareader_qos>
-							<reliability>
-								<kind>RELIABLE_RELIABILITY_QOS</kind>
-							</reliability>
+                            <reliability>
+                                <kind>RELIABLE_RELIABILITY_QOS</kind>
+                            </reliability>
                             <history>
                                 <kind>KEEP_LAST_HISTORY_QOS</kind>
                                 <depth>100</depth>
                             </history>
-						    <!-- !!!ToDo: update as required -->
+                            <!-- !!!ToDo: update as required -->
                         </datareader_qos>
                     </input>
                     <output participant="WanParticipant">
                         <allow_topic_name_filter>PatientPulseTopic</allow_topic_name_filter>
-						<datawriter_qos>
-							<reliability>
-								<kind>RELIABLE_RELIABILITY_QOS</kind>
-							</reliability>
+                        <datawriter_qos>
+                            <reliability>
+                                <kind>RELIABLE_RELIABILITY_QOS</kind>
+                            </reliability>
                             <history>
                                 <kind>KEEP_LAST_HISTORY_QOS</kind>
                                 <depth>100</depth>
                             </history>
- 						    <!-- !!!ToDo: update as required; this is going to the TCP tunnel so probably not much needed? -->
-						</datawriter_qos>
+                            <!-- !!!ToDo: update as required; this is going to the TCP tunnel so probably not much needed? -->
+                        </datawriter_qos>
                     </output>
                 </auto_topic_route>
 
@@ -154,28 +154,28 @@
                     <input participant="LocalParticipant">
                         <allow_topic_name_filter>PatientInfoTopic</allow_topic_name_filter>
                         <datareader_qos>
-							<reliability>
-								<kind>RELIABLE_RELIABILITY_QOS</kind>
-							</reliability>
+                            <reliability>
+                                <kind>RELIABLE_RELIABILITY_QOS</kind>
+                            </reliability>
                             <history>
                                 <kind>KEEP_LAST_HISTORY_QOS</kind>
                                 <depth>2</depth>
                             </history>
-						    <!-- !!!ToDo: update as required -->
+                            <!-- !!!ToDo: update as required -->
                         </datareader_qos>
                     </input>
                     <output participant="WanParticipant">
                         <allow_topic_name_filter>PatientInfoTopic</allow_topic_name_filter>
-						<datawriter_qos>
-							<reliability>
-								<kind>RELIABLE_RELIABILITY_QOS</kind>
-							</reliability>
+                        <datawriter_qos>
+                            <reliability>
+                                <kind>RELIABLE_RELIABILITY_QOS</kind>
+                            </reliability>
                             <history>
                                 <kind>KEEP_LAST_HISTORY_QOS</kind>
                                 <depth>2</depth>
                             </history>
- 						    <!-- !!!ToDo: update as required; this is going to the TCP tunnel so probably not much needed? -->
-						</datawriter_qos>
+                            <!-- !!!ToDo: update as required; this is going to the TCP tunnel so probably not much needed? -->
+                        </datawriter_qos>
                     </output>
                 </auto_topic_route>
                 

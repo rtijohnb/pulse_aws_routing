@@ -47,7 +47,7 @@
                 <participant_qos>
                     <discovery>
                         <initial_peers>
-                            <element>tcpv4_wan://50.18.214.8:9900</element>
+                            <element>tcpv4_wan://192.168.1.71:9900</element>
                         </initial_peers>
                     </discovery>
                     <discovery_config>
@@ -130,6 +130,9 @@
                     <output participant="LocalParticipant">
                         <allow_topic_name_filter>PatientConfigTopic</allow_topic_name_filter>
                         <datawriter_qos>
+                            <publication_name>
+                                <name>PiLocalConfigWriter</name>
+                            </publication_name>
                             <reliability>
                                 <kind>RELIABLE_RELIABILITY_QOS</kind>
                             </reliability>
@@ -159,6 +162,9 @@
                     <output participant="WanParticipant">
                         <allow_topic_name_filter>PatientPulseTopic</allow_topic_name_filter>
                         <datawriter_qos>
+                            <publication_name>
+                                <name>PiWanPulseWriter</name>
+                            </publication_name>
                             <reliability>
                                 <kind>RELIABLE_RELIABILITY_QOS</kind>
                             </reliability>
@@ -189,6 +195,9 @@
                     <output participant="WanParticipant">
                         <allow_topic_name_filter>PatientInfoTopic</allow_topic_name_filter>
                         <datawriter_qos>
+                            <publication_name>
+                                <name>PiWanInfoWriter</name>
+                            </publication_name>
                             <reliability>
                                 <kind>RELIABLE_RELIABILITY_QOS</kind>
                             </reliability>

@@ -54,7 +54,7 @@
                             </element>
                             <element>
                                 <name>dds.transport.TCPv4.tcp1.public_address</name>
-                                <value>50.18.214.8:9900</value>
+                                <value>192.168.1.71:9900</value>
                             </element>
                             <element>
                                 <name>dds.transport.TCPv4.tcp1.server_bind_port</name>
@@ -107,6 +107,9 @@
                     <output participant="WanParticipant">
                         <allow_topic_name_filter>PatientConfigTopic</allow_topic_name_filter>
                         <datawriter_qos>
+                            <publication_name>
+                                <name>AwsRsConfigWriter</name>
+                            </publication_name>
                             <reliability>
                                 <kind>RELIABLE_RELIABILITY_QOS</kind>
                             </reliability>
@@ -136,6 +139,9 @@
                     <output participant="LocalParticipant">
                         <allow_topic_name_filter>PatientPulseTopic</allow_topic_name_filter>
                         <datawriter_qos>
+                            <publication_name>
+                                <name>AwsRsPulseWriter</name>
+                            </publication_name>
                             <reliability>
                                <kind>RELIABLE_RELIABILITY_QOS</kind>
                             </reliability>
@@ -165,6 +171,9 @@
                     <output participant="LocalParticipant">
                         <allow_topic_name_filter>PatientInfoTopic</allow_topic_name_filter>
                         <datawriter_qos>
+                            <publication_name>
+                                <name>AwsRsInfoWriter</name>
+                            </publication_name>
                             <reliability>
                                 <kind>RELIABLE_RELIABILITY_QOS</kind>
                             </reliability>

@@ -106,7 +106,7 @@
                             </reliability>
                             <history>
                                 <kind>KEEP_LAST_HISTORY_QOS</kind>
-                                <depth>100</depth>
+                                <depth>200</depth>
                             </history>
                             <!-- !!!ToDo: update as required; this is coming from the TCP tunnel so probably not much needed? -->
                         </datareader_qos>
@@ -119,8 +119,15 @@
                             </reliability>
                             <history>
                                 <kind>KEEP_LAST_HISTORY_QOS</kind>
-                                <depth>100</depth>
+                                <depth>200</depth>
                             </history>
+                           <protocol>
+                                <rtps_reliable_writer>
+                                        <heartbeat_period><sec>0</sec><nanosec>600000000</nanosec></heartbeat_period>
+                                        <fast_heartbeat_period><sec>0</sec><nanosec>300000000</nanosec></fast_heartbeat_period>
+                                        <late_joiner_heartbeat_period><sec>0</sec><nanosec>200000000</nanosec></late_joiner_heartbeat_period>
+                                </rtps_reliable_writer>
+                           </protocol>
                             <!-- !!!ToDo: update as required -->
                         </datawriter_qos>
                     </output>

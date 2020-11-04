@@ -123,9 +123,9 @@
                             </history>
                            <protocol>
                                 <rtps_reliable_writer>
-                                        <heartbeat_period><sec>0</sec><nanosec>600000000</nanosec></heartbeat_period>
-                                        <fast_heartbeat_period><sec>0</sec><nanosec>300000000</nanosec></fast_heartbeat_period>
-                                        <late_joiner_heartbeat_period><sec>0</sec><nanosec>200000000</nanosec></late_joiner_heartbeat_period>
+                                        <heartbeat_period><sec>0</sec><nanosec>200000000</nanosec></heartbeat_period>
+                                        <fast_heartbeat_period><sec>0</sec><nanosec>80000000</nanosec></fast_heartbeat_period>
+                                        <late_joiner_heartbeat_period><sec>0</sec><nanosec>70000000</nanosec></late_joiner_heartbeat_period>
                                 </rtps_reliable_writer>
                            </protocol>
                             <!-- !!!ToDo: update as required -->

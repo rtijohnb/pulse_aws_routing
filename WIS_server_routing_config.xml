@@ -23,6 +23,10 @@
             <participant name="WanParticipant">
                 <domain_id>10</domain_id>
                 <participant_qos>
+                    <participant_name>
+                        <name>AwsRsWanParticipant</name>
+                        <role_name>AwsRsWanParticipantRole</role_name>
+                    </participant_name> 
                     <transport_builtin>
                         <mask>MASK_NONE</mask>
                     </transport_builtin>
@@ -72,6 +76,10 @@
             <participant name="LocalParticipant">
                 <domain_id>20</domain_id>
                 <participant_qos> 
+                    <participant_name>
+                        <name>AwsRsLocalParticipant</name>
+                        <role_name>AwsRsLocalParticipantRole</role_name>
+                    </participant_name> 
                     <property> 
                         <value> 
                             <element> 

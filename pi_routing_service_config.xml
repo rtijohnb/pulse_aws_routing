@@ -24,6 +24,10 @@
             <participant name="LocalParticipant">
                 <domain_id>0</domain_id>  <!-- !!!ToDo: Ask Dave what domain ID they want to use on the Pi -->
                 <participant_qos> 
+                    <participant_name>
+                        <name>PiRsLocalParticipant</name>
+                        <role_name>PiRsLocalParticipantRole</role_name>
+                    </participant_name> 
                     <property> 
                         <value> 
                             <element> 
@@ -45,6 +49,10 @@
             <participant name="WanParticipant">
                 <domain_id>10</domain_id>
                 <participant_qos>
+                    <participant_name>
+                        <name>PiRsWanParticipant</name>
+                        <role_name>PiRsWanParticipantRole</role_name>
+                    </participant_name> 
                     <discovery>
                         <initial_peers>
                             <element>tcpv4_wan://192.168.1.71:9900</element>

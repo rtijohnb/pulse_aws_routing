@@ -23,6 +23,20 @@
         <!-- service and the actual Pulse application that is running on the Pi.     -->
             <participant name="LocalParticipant">
                 <domain_id>0</domain_id>  <!-- !!!ToDo: Ask Dave what domain ID they want to use on the Pi -->
+                <participant_qos> 
+                    <property> 
+                        <value> 
+                            <element> 
+                                <name>rti.monitor.library</name> 
+                                <value>rtimonitoring</value> 
+                            </element> 
+                            <element> 
+                                <name>rti.monitor.create_function</name> 
+                                <value>RTIDefaultMonitor_create</value> 
+                            </element> 
+                        </value> 
+                    </property> 
+                </participant_qos> 
             </participant>
 
         <!-- The "WanParticipant" is the DDS domain that uses the TCP-WAN transport  -->
@@ -47,6 +61,14 @@
                     </transport_builtin>
                     <property>
                         <value>
+                            <element> 
+                                <name>rti.monitor.library</name> 
+                                <value>rtimonitoring</value> 
+                            </element> 
+                            <element> 
+                                <name>rti.monitor.create_function</name> 
+                                <value>RTIDefaultMonitor_create</value> 
+                            </element> 
                             <element>
                                 <name>dds.transport.load_plugins</name>
                                 <value>dds.transport.TCPv4.tcp1</value>

@@ -28,6 +28,14 @@
                     </transport_builtin>
                     <property>
                         <value>
+                            <element> 
+                                <name>rti.monitor.library</name> 
+                                <value>rtimonitoring</value> 
+                            </element> 
+                            <element> 
+                                <name>rti.monitor.create_function</name> 
+                                <value>RTIDefaultMonitor_create</value> 
+                            </element> 
                             <element>
                                 <name>dds.transport.load_plugins</name>
                                 <value>dds.transport.TCPv4.tcp1</value>
@@ -63,6 +71,20 @@
 
             <participant name="LocalParticipant">
                 <domain_id>20</domain_id>
+                <participant_qos> 
+                    <property> 
+                        <value> 
+                            <element> 
+                                <name>rti.monitor.library</name> 
+                                <value>rtimonitoring</value> 
+                            </element> 
+                            <element> 
+                                <name>rti.monitor.create_function</name> 
+                                <value>RTIDefaultMonitor_create</value> 
+                            </element> 
+                        </value> 
+                    </property> 
+                </participant_qos> 
             </participant>
 
             <session name="Session" enabled="true">

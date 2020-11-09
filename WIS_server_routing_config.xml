@@ -3,16 +3,264 @@
      xsi:noNamespaceSchemaLocation="https://community.rti.com/schema/6.0.0/rti_routing_service.xsd">
 
     <!-- ************************************************************************* -->
+    <!-- QoS configurations used below.                                            -->
+    <!-- ************************************************************************* -->
+    <qos_library name="PulseQosLib">
+
+        <qos_profile name="WisRS_WanQosProfile">
+
+            <participant_qos name="ParticipantQos">
+                <participant_name>
+                    <name>AwsRsWanParticipant</name>
+                    <role_name>AwsRsWanParticipantRole</role_name>
+                </participant_name> 
+                <transport_builtin>
+                    <mask>MASK_NONE</mask>
+                </transport_builtin>
+                <property>
+                    <value>
+                        <element>
+                            <name>dds.transport.load_plugins</name>
+                            <value>dds.transport.TCPv4.tcp1</value>
+                        </element>
+                        <element>
+                            <name>dds.transport.TCPv4.tcp1.library</name>
+                            <value>nddstransporttcp</value>
+                        </element>
+                        <element>
+                            <name>dds.transport.TCPv4.tcp1.create_function</name>
+                            <value>NDDS_Transport_TCPv4_create</value>
+                        </element>
+                        <element>
+                            <name>dds.transport.TCPv4.tcp1.parent.classid</name>
+                            <value>NDDS_TRANSPORT_CLASSID_TCPV4_WAN</value>
+                        </element>
+                        <element>
+                            <name>dds.transport.TCPv4.tcp1.public_address</name>
+                            <value>50.18.214.8:9900</value>
+                        </element>
+                        <element>
+                            <name>dds.transport.TCPv4.tcp1.server_bind_port</name>
+                            <value>9900</value>
+                        </element>
+                        <element>
+                            <name>dds.transport.TCPv4.tcp1.disable_nagle</name>
+                            <value>1</value>
+                        </element>
+                    </value>
+                </property>
+            </participant_qos>
+
+            <datawriter_qos name="ConfigTopicWriter">
+                <publication_name>
+                    <name>AwsRsConfigWriter</name>
+                </publication_name>
+                <reliability>
+                    <kind>RELIABLE_RELIABILITY_QOS</kind>
+                </reliability>
+                <history>
+                    <kind>KEEP_LAST_HISTORY_QOS</kind>
+                    <depth>5</depth>
+                </history>
+            </datawriter_qos>
+
+            <datareader_qos name="PulseTopicReader">
+                <reliability>
+                    <kind>RELIABLE_RELIABILITY_QOS</kind>
+                </reliability>
+                <history>
+                    <kind>KEEP_LAST_HISTORY_QOS</kind>
+                    <depth>200</depth>
+                </history>
+                <!-- !!!ToDo: update as required; this is coming from the TCP tunnel so probably not much needed? -->
+            </datareader_qos>
+
+            <datareader_qos name="InfoTopicReader">
+                <reliability>
+                    <kind>RELIABLE_RELIABILITY_QOS</kind>
+                </reliability>
+                <history>
+                    <kind>KEEP_LAST_HISTORY_QOS</kind>
+                    <depth>2</depth>
+                </history>
+                <!-- !!!ToDo: update as required; this is coming from the TCP tunnel so probably not much needed? -->
+            </datareader_qos>
+
+        </qos_profile>
+
+        <qos_profile name="WisRS_WanMonQosProfile" base_name="WisRS_WanQosProfile">
+            <participant_qos name="ParticipantQos">
+                <property> 
+                    <value> 
+                        <element> 
+                            <name>rti.monitor.library</name> 
+                            <value>rtimonitoring</value> 
+                        </element> 
+                        <element> 
+                            <name>rti.monitor.create_function</name> 
+                            <value>RTIDefaultMonitor_create</value> 
+                        </element> 
+                    </value> 
+                </property> 
+            </participant_qos> 
+        </qos_profile>
+
+        <qos_profile name="WisRS_LanQosProfile">
+
+            <participant_qos name="ParticipantQos">
+                <participant_name>
+                    <name>AwsRsLanParticipant</name>
+                    <role_name>AwsRsLanParticipantRole</role_name>
+                </participant_name> 
+            </participant_qos>
+
+            <datareader_qos name="ConfigTopicReader">
+                <reliability>
+                    <kind>RELIABLE_RELIABILITY_QOS</kind>
+                </reliability>
+                <history>
+                    <kind>KEEP_LAST_HISTORY_QOS</kind>
+                    <depth>5</depth>
+                </history>
+                <!-- !!!ToDo: update as required -->
+            </datareader_qos>
+
+            <datawriter_qos name="PulseTopicWriter">
+                <publication_name>
+                    <name>AwsRsPulseWriter</name>
+                </publication_name>
+                <reliability>
+                    <kind>RELIABLE_RELIABILITY_QOS</kind>
+                </reliability>
+                <history>
+                    <kind>KEEP_LAST_HISTORY_QOS</kind>
+                    <depth>200</depth>
+                </history>
+                <protocol>
+                    <rtps_reliable_writer>
+                        <heartbeat_period><sec>0</sec><nanosec>200000000</nanosec></heartbeat_period>
+                        <fast_heartbeat_period><sec>0</sec><nanosec>80000000</nanosec></fast_heartbeat_period>
+                        <late_joiner_heartbeat_period><sec>0</sec><nanosec>70000000</nanosec></late_joiner_heartbeat_period>
+                    </rtps_reliable_writer>
+                </protocol>
+                <!-- !!!ToDo: update as required -->
+            </datawriter_qos>
+			
+            <datawriter_qos name="InfoTopicWriter">
+                <publication_name>
+                    <name>AwsRsInfoWriter</name>
+                </publication_name>
+                <reliability>
+                    <kind>RELIABLE_RELIABILITY_QOS</kind>
+                </reliability>
+                <history>
+                    <kind>KEEP_LAST_HISTORY_QOS</kind>
+                    <depth>2</depth>
+                </history>
+                <!-- !!!ToDo: update as required -->
+            </datawriter_qos>
+
+        </qos_profile>
+
+        <qos_profile name="WisRS_LanMonQosProfile" base_name="WisRS_LanQosProfile">
+            <participant_qos name="ParticipantQos"> 
+                <property> 
+                    <value> 
+                        <element> 
+                            <name>rti.monitor.library</name> 
+                            <value>rtimonitoring</value> 
+                        </element> 
+                        <element> 
+                            <name>rti.monitor.create_function</name> 
+                            <value>RTIDefaultMonitor_create</value> 
+                        </element> 
+                    </value> 
+                </property> 
+            </participant_qos> 
+        </qos_profile>
+
+	</qos_library>
+
+    <!-- ************************************************************************* -->
     <!-- Routing service configuration file for use on the AWS instance used to    -->
     <!-- host the WIS instance for the Pulse demo.  This bridges between a local   -->
-    <!-- DDS domain on the AWS instance and a TCP-WAN connection remote Pi-local   -->
-    <!-- routing instances.                                                        -->
+    <!-- DDS domain on the AWS instance and a TCP-WAN connection to a remote,      -->
+    <!-- Pi-local routing instance.                                                -->
     <!-- ************************************************************************* -->
 
     <routing_service name="PulseWis">
 	
         <annotation>
-		<documentation>Configuration for WIS-side routing service in the Pulse demo. Adjust the public IP addr/port for the known server.</documentation>
+		<documentation>Configuration for WIS-side routing service in the Pulse demo.</documentation>
+		</annotation>
+
+        <!-- Enable remote administration of the routing service from some specified domain -->
+        <administration><domain_id>0</domain_id></administration>
+
+        <domain_route name="Route">
+
+            <participant name="WanParticipant">
+                <domain_id>10</domain_id>
+				<participant_qos base_name="PulseQosLib::WisRS_WanQosProfile::ParticipantQos"/>
+            </participant>
+
+            <participant name="LocalParticipant">
+                <domain_id>20</domain_id>
+				<participant_qos base_name="PulseQosLib::WisRS_LanQosProfile::ParticipantQos"/>
+            </participant>
+
+            <session name="Session" enabled="true">
+
+                <auto_topic_route name="ForwardConfigToPi" enabled="true">
+                    <publish_with_original_info>true</publish_with_original_info>                    
+                    <input participant="LocalParticipant">
+                        <allow_topic_name_filter>PatientConfigTopic</allow_topic_name_filter>
+                        <datareader_qos base_name="PulseQosLib::WisRS_LanQosProfile::ConfigTopicReader"/>
+                    </input>
+                    <output participant="WanParticipant">
+                        <allow_topic_name_filter>PatientConfigTopic</allow_topic_name_filter>
+                        <datawriter_qos base_name="PulseQosLib::WisRS_WanQosProfile::ConfigTopicWriter"/>
+                    </output>
+                </auto_topic_route>
+
+                <auto_topic_route name="ForwardPulseFromPi" enabled="true">
+                    <publish_with_original_info>true</publish_with_original_info>
+                    <input participant="WanParticipant">
+                        <allow_topic_name_filter>PatientPulseTopic</allow_topic_name_filter>
+                        <datareader_qos base_name="PulseQosLib::WisRS_WanQosProfile::PulseTopicReader"/>
+                    </input>
+                    <output participant="LocalParticipant">
+                        <allow_topic_name_filter>PatientPulseTopic</allow_topic_name_filter>
+                        <datawriter_qos base_name="PulseQosLib::WisRS_LanQosProfile::PulseTopicWriter"/>
+                    </output>
+                </auto_topic_route>
+				
+                <auto_topic_route name="ForwardInfoFromPi" enabled="true">
+                    <input participant="WanParticipant">
+                        <allow_topic_name_filter>PatientInfoTopic</allow_topic_name_filter>
+                        <datareader_qos base_name="PulseQosLib::WisRS_WanQosProfile::InfoTopicReader"/>
+                    </input>
+                    <output participant="LocalParticipant">
+                        <allow_topic_name_filter>PatientInfoTopic</allow_topic_name_filter>
+                        <datawriter_qos base_name="PulseQosLib::WisRS_LanQosProfile::InfoTopicWriter"/>
+                    </output>
+                </auto_topic_route>
+
+            </session>
+        </domain_route>
+    </routing_service>
+
+    <!-- ************************************************************************* -->
+    <!-- Monitor-enabled Routing Service configuration file for use on the AWS     -->
+    <!-- instance used to host the WIS instance for the Pulse demo.  This bridges  -->
+    <!-- between a local DDS domain on the AWS instance and a TCP-WAN connection   -->
+    <!-- to a remote, Pi-local routing instance                                    -->
+    <!-- ************************************************************************* -->
+
+    <routing_service name="PulseWisMon">
+	
+        <annotation>
+		<documentation>Configuration for WIS-side monitor-enabled routing service in the Pulse demo.</documentation>
 		</annotation>
 
         <!-- Enable remote administration of the routing service from some specified domain -->
@@ -22,77 +270,12 @@
 
             <participant name="WanParticipant">
                 <domain_id>10</domain_id>
-                <participant_qos>
-                    <participant_name>
-                        <name>AwsRsWanParticipant</name>
-                        <role_name>AwsRsWanParticipantRole</role_name>
-                    </participant_name> 
-                    <transport_builtin>
-                        <mask>MASK_NONE</mask>
-                    </transport_builtin>
-                    <property>
-                        <value>
-                            <element> 
-                                <name>rti.monitor.library</name> 
-                                <value>rtimonitoring</value> 
-                            </element> 
-                            <element> 
-                                <name>rti.monitor.create_function</name> 
-                                <value>RTIDefaultMonitor_create</value> 
-                            </element> 
-                            <element>
-                                <name>dds.transport.load_plugins</name>
-                                <value>dds.transport.TCPv4.tcp1</value>
-                            </element>
-                            <element>
-                                <name>dds.transport.TCPv4.tcp1.library</name>
-                                <value>nddstransporttcp</value>
-                            </element>
-                            <element>
-                                <name>dds.transport.TCPv4.tcp1.create_function</name>
-                                <value>NDDS_Transport_TCPv4_create</value>
-                            </element>
-                            <element>
-                                <name>dds.transport.TCPv4.tcp1.parent.classid</name>
-                                <value>NDDS_TRANSPORT_CLASSID_TCPV4_WAN</value>
-                            </element>
-                            <element>
-                                <name>dds.transport.TCPv4.tcp1.public_address</name>
-                                <value>50.18.214.8:9900</value>
-                            </element>
-                            <element>
-                                <name>dds.transport.TCPv4.tcp1.server_bind_port</name>
-                                <value>9900</value>
-                            </element>
-                            <element>
-                                <name>dds.transport.TCPv4.tcp1.disable_nagle</name>
-                                <value>1</value>
-                            </element>
-                        </value>
-                    </property>
-                </participant_qos>
+				<participant_qos base_name="PulseQosLib::WisRS_WanMonQosProfile::ParticipantQos"/>
             </participant>
 
             <participant name="LocalParticipant">
                 <domain_id>20</domain_id>
-                <participant_qos> 
-                    <participant_name>
-                        <name>AwsRsLocalParticipant</name>
-                        <role_name>AwsRsLocalParticipantRole</role_name>
-                    </participant_name> 
-                    <property> 
-                        <value> 
-                            <element> 
-                                <name>rti.monitor.library</name> 
-                                <value>rtimonitoring</value> 
-                            </element> 
-                            <element> 
-                                <name>rti.monitor.create_function</name> 
-                                <value>RTIDefaultMonitor_create</value> 
-                            </element> 
-                        </value> 
-                    </property> 
-                </participant_qos> 
+				<participant_qos base_name="PulseQosLib::WisRS_LanMonQosProfile::ParticipantQos"/>
             </participant>
 
             <session name="Session" enabled="true">
@@ -101,31 +284,11 @@
                     <publish_with_original_info>true</publish_with_original_info>                    
                     <input participant="LocalParticipant">
                         <allow_topic_name_filter>PatientConfigTopic</allow_topic_name_filter>
-                        <datareader_qos>
-                            <reliability>
-                                <kind>RELIABLE_RELIABILITY_QOS</kind>
-                            </reliability>
-                            <history>
-                                <kind>KEEP_LAST_HISTORY_QOS</kind>
-                                <depth>5</depth>
-                            </history>
-                            <!-- !!!ToDo: update as required -->
-                        </datareader_qos>
+                        <datareader_qos base_name="PulseQosLib::WisRS_LanQosProfile::ConfigTopicReader"/>
                     </input>
                     <output participant="WanParticipant">
                         <allow_topic_name_filter>PatientConfigTopic</allow_topic_name_filter>
-                        <datawriter_qos>
-                            <publication_name>
-                                <name>AwsRsConfigWriter</name>
-                            </publication_name>
-                            <reliability>
-                                <kind>RELIABLE_RELIABILITY_QOS</kind>
-                            </reliability>
-                            <history>
-                                <kind>KEEP_LAST_HISTORY_QOS</kind>
-                                <depth>5</depth>
-                            </history>
-                        </datawriter_qos>
+                        <datawriter_qos base_name="PulseQosLib::WisRS_WanQosProfile::ConfigTopicWriter"/>
                     </output>
                 </auto_topic_route>
 
@@ -133,75 +296,27 @@
                     <publish_with_original_info>true</publish_with_original_info>
                     <input participant="WanParticipant">
                         <allow_topic_name_filter>PatientPulseTopic</allow_topic_name_filter>
-                        <datareader_qos>
-                            <reliability>
-                                <kind>RELIABLE_RELIABILITY_QOS</kind>
-                            </reliability>
-                            <history>
-                                <kind>KEEP_LAST_HISTORY_QOS</kind>
-                                <depth>200</depth>
-                            </history>
-                            <!-- !!!ToDo: update as required; this is coming from the TCP tunnel so probably not much needed? -->
-                        </datareader_qos>
+                        <datareader_qos base_name="PulseQosLib::WisRS_WanQosProfile::PulseTopicReader"/>
                     </input>
                     <output participant="LocalParticipant">
                         <allow_topic_name_filter>PatientPulseTopic</allow_topic_name_filter>
-                        <datawriter_qos>
-                            <publication_name>
-                                <name>AwsRsPulseWriter</name>
-                            </publication_name>
-                            <reliability>
-                               <kind>RELIABLE_RELIABILITY_QOS</kind>
-                            </reliability>
-                            <history>
-                                <kind>KEEP_LAST_HISTORY_QOS</kind>
-                                <depth>200</depth>
-                            </history>
-                           <protocol>
-                                <rtps_reliable_writer>
-                                        <heartbeat_period><sec>0</sec><nanosec>200000000</nanosec></heartbeat_period>
-                                        <fast_heartbeat_period><sec>0</sec><nanosec>80000000</nanosec></fast_heartbeat_period>
-                                        <late_joiner_heartbeat_period><sec>0</sec><nanosec>70000000</nanosec></late_joiner_heartbeat_period>
-                                </rtps_reliable_writer>
-                           </protocol>
-                            <!-- !!!ToDo: update as required -->
-                        </datawriter_qos>
+                        <datawriter_qos base_name="PulseQosLib::WisRS_LanQosProfile::PulseTopicWriter"/>
                     </output>
                 </auto_topic_route>
 				
                 <auto_topic_route name="ForwardInfoFromPi" enabled="true">
                     <input participant="WanParticipant">
                         <allow_topic_name_filter>PatientInfoTopic</allow_topic_name_filter>
-                        <datareader_qos>
-                            <reliability>
-                                <kind>RELIABLE_RELIABILITY_QOS</kind>
-                            </reliability>
-                            <history>
-                                <kind>KEEP_LAST_HISTORY_QOS</kind>
-                                <depth>2</depth>
-                            </history>
-                            <!-- !!!ToDo: update as required. -->
-                        </datareader_qos>
+                        <datareader_qos base_name="PulseQosLib::WisRS_WanQosProfile::InfoTopicReader"/>
                     </input>
                     <output participant="LocalParticipant">
                         <allow_topic_name_filter>PatientInfoTopic</allow_topic_name_filter>
-                        <datawriter_qos>
-                            <publication_name>
-                                <name>AwsRsInfoWriter</name>
-                            </publication_name>
-                            <reliability>
-                                <kind>RELIABLE_RELIABILITY_QOS</kind>
-                            </reliability>
-                            <history>
-                                <kind>KEEP_LAST_HISTORY_QOS</kind>
-                                <depth>2</depth>
-                            </history>
-                            <!-- !!!ToDo: update as required -->
-                        </datawriter_qos>
+                        <datawriter_qos base_name="PulseQosLib::WisRS_LanQosProfile::InfoTopicWriter"/>
                     </output>
                 </auto_topic_route>
 
             </session>
         </domain_route>
     </routing_service>
+
 </dds>

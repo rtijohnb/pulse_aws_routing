@@ -3,6 +3,159 @@
      xsi:noNamespaceSchemaLocation="https://community.rti.com/schema/6.0.0/rti_routing_service.xsd">
 
     <!-- ************************************************************************* -->
+    <!-- QoS configurations used below.                                            -->
+    <!-- ************************************************************************* -->
+
+    <qos_library name="PulseQosLib">
+
+        <qos_profile name="PiRS_LanQosProfile">
+
+            <participant_qos name="ParticipantQoS"> 
+                <participant_name>
+                    <name>PiRsLocalParticipant</name>
+                    <role_name>PiRsLocalParticipantRole</role_name>
+                </participant_name> 
+            </participant_qos> 
+
+            <datawriter_qos name="ConfigTopicWriter">
+                <publication_name>
+                    <name>PiLocalConfigWriter</name>
+                </publication_name>
+                <reliability>
+                    <kind>RELIABLE_RELIABILITY_QOS</kind>
+                </reliability>
+                <history>
+                    <kind>KEEP_LAST_HISTORY_QOS</kind>
+                    <depth>5</depth>
+                </history>
+            </datawriter_qos>
+
+            <datareader_qos name="PulseTopicReader">
+                <reliability>
+                    <kind>RELIABLE_RELIABILITY_QOS</kind>
+                </reliability>
+                <history>
+                    <kind>KEEP_LAST_HISTORY_QOS</kind>
+                    <depth>100</depth>
+                </history>
+                <!-- !!!ToDo: update as required -->
+            </datareader_qos>
+
+        </qos_profile>
+
+        <qos_profile name="PiRS_LanMonQosProfile" base_name="PiRS_LanQosProfile">
+            <participant_qos name="ParticipantQoS"> 
+                <property> 
+                    <value> 
+                        <element> 
+                            <name>rti.monitor.library</name> 
+                            <value>rtimonitoring</value> 
+                        </element> 
+                        <element> 
+                            <name>rti.monitor.create_function</name> 
+                            <value>RTIDefaultMonitor_create</value> 
+                        </element> 
+                    </value> 
+                </property> 
+            </participant_qos> 
+        </qos_profile>
+
+        <qos_profile name="PiRS_WanQosProfile">
+
+            <participant_qos name="ParticipantQoS">
+                <participant_name>
+                    <name>PiRsWanParticipant</name>
+                    <role_name>PiRsWanParticipantRole</role_name>
+                </participant_name> 
+                <discovery>
+                    <initial_peers>
+                        <element>tcpv4_wan://50.18.214.8:9900</element>
+                    </initial_peers>
+                </discovery>
+                <discovery_config>
+                    <participant_liveliness_assert_period>
+                        <sec>10</sec>
+                        <nanosec>0</nanosec>
+                    </participant_liveliness_assert_period>
+                </discovery_config>
+                <transport_builtin>
+                        <mask>MASK_NONE</mask>
+                </transport_builtin>
+                <property>
+                    <value>
+                        <element>
+                            <name>dds.transport.load_plugins</name>
+                            <value>dds.transport.TCPv4.tcp1</value>
+                        </element>
+                        <element>
+                            <name>dds.transport.TCPv4.tcp1.library</name>
+                            <value>nddstransporttcp</value>
+                        </element>
+                        <element>
+                            <name>dds.transport.TCPv4.tcp1.create_function</name>
+                            <value>NDDS_Transport_TCPv4_create</value>
+                        </element>
+                        <element>
+                            <name>dds.transport.TCPv4.tcp1.parent.classid</name>
+                            <value>NDDS_TRANSPORT_CLASSID_TCPV4_WAN</value>
+                        </element>
+                        <element>
+                            <name>dds.transport.TCPv4.tcp1.connection_liveliness.enable</name>
+                            <value>1</value>
+                        </element>
+                        <element>
+                            <name>dds.transport.TCPv4.tcp1.connection_liveliness.lease_duration</name>
+                            <value>10</value>
+                        </element>
+                        <element>
+                            <name>dds.transport.TCPv4.tcp1.connection_liveliness.assertions_per_lease_duration</name>
+                            <value>4</value>
+                        </element>
+                        <element>
+                            <name>dds.transport.TCPv4.tcp1.server_bind_port</name>
+                            <value>0</value> <!-- changed to zero since we're not supporting inbound connections -->
+                        </element>
+                        <element>
+                            <name>dds.transport.TCPv4.tcp1.disable_nagle</name>
+                            <value>1</value>
+                        </element>
+                    </value>
+                </property>
+            </participant_qos>
+
+            <datareader_qos name="ConfigTopicReader">
+                <reliability>
+                    <kind>RELIABLE_RELIABILITY_QOS</kind>
+                </reliability>
+                <history>
+                    <kind>KEEP_LAST_HISTORY_QOS</kind>
+                    <depth>5</depth>
+                </history>
+                <!-- ToDo: update as required -->
+            </datareader_qos>
+
+        </qos_profile>
+
+        <qos_profile name="PiRS_WanMonQosProfile" base_name="PiRS_WanQosProfile">
+            <participant_qos name="ParticipantQoS"> 
+                <property> 
+                    <value> 
+                        <element> 
+                            <name>rti.monitor.library</name> 
+                            <value>rtimonitoring</value> 
+                        </element> 
+                        <element> 
+                            <name>rti.monitor.create_function</name> 
+                            <value>RTIDefaultMonitor_create</value> 
+                        </element> 
+                    </value> 
+                </property> 
+            </participant_qos> 
+        </qos_profile>
+
+    </qos_library>
+
+    <!-- ************************************************************************* -->
     <!-- Routing service configuration file for use on the Pi (pulse monitor side) -->
     <!-- of the Pulse demo.  This bridges between a local DDS domain on the Pi and -->
     <!-- a TCP-WAN connection to the cloud-based Web-Integration-Service server.   -->
@@ -11,144 +164,35 @@
     <routing_service name="PulsePi">
 
         <annotation>
-		<documentation>Configuration for Pi-side routing service in the Pulse demo. Adjust the public IP addr/port for the known server.</documentation>
+		<documentation>Configuration for Pi-side routing service in the Pulse demo.</documentation>
 		</annotation>
 
         <!-- Enable remote administration of the routing service from some specified domain -->
-        <administration><domain_id>0</domain_id></administration> <!-- !!!ToDo: Ask Dave if he wants administration at all and from where -->
+        <administration><domain_id>0</domain_id></administration>
 
         <domain_route name="Route">
 
-        <!-- The "LocalParticipant" is the local DDS domain used between the routing -->
-        <!-- service and the actual Pulse application that is running on the Pi.     -->
             <participant name="LocalParticipant">
-                <domain_id>0</domain_id>  <!-- !!!ToDo: Ask Dave what domain ID they want to use on the Pi -->
-                <participant_qos> 
-                    <participant_name>
-                        <name>PiRsLocalParticipant</name>
-                        <role_name>PiRsLocalParticipantRole</role_name>
-                    </participant_name> 
-                    <property> 
-                        <value> 
-                            <element> 
-                                <name>rti.monitor.library</name> 
-                                <value>rtimonitoring</value> 
-                            </element> 
-                            <element> 
-                                <name>rti.monitor.create_function</name> 
-                                <value>RTIDefaultMonitor_create</value> 
-                            </element> 
-                        </value> 
-                    </property> 
-                </participant_qos> 
+                <domain_id>0</domain_id>
+				<participant_qos base_name="PulseQosLib::PiRS_LanQosProfile::ParticipantQoS"/>
             </participant>
 
-        <!-- The "WanParticipant" is the DDS domain that uses the TCP-WAN transport  -->
-        <!-- to connect to the remote WIS server.  Adjust the IP address and port    -->
-        <!-- information as required.                                                -->
             <participant name="WanParticipant">
                 <domain_id>10</domain_id>
-                <participant_qos>
-                    <participant_name>
-                        <name>PiRsWanParticipant</name>
-                        <role_name>PiRsWanParticipantRole</role_name>
-                    </participant_name> 
-                    <discovery>
-                        <initial_peers>
-                            <element>tcpv4_wan://50.18.214.8:9900</element>
-                        </initial_peers>
-                    </discovery>
-                    <discovery_config>
-                        <participant_liveliness_assert_period>
-                            <sec>10</sec>
-                            <nanosec>0</nanosec>
-                        </participant_liveliness_assert_period>
-                    </discovery_config>
-                    <transport_builtin>
-                        <mask>MASK_NONE</mask>
-                    </transport_builtin>
-                    <property>
-                        <value>
-                            <element> 
-                                <name>rti.monitor.library</name> 
-                                <value>rtimonitoring</value> 
-                            </element> 
-                            <element> 
-                                <name>rti.monitor.create_function</name> 
-                                <value>RTIDefaultMonitor_create</value> 
-                            </element> 
-                            <element>
-                                <name>dds.transport.load_plugins</name>
-                                <value>dds.transport.TCPv4.tcp1</value>
-                            </element>
-                            <element>
-                                <name>dds.transport.TCPv4.tcp1.library</name>
-                                <value>nddstransporttcp</value>
-                            </element>
-                            <element>
-                                <name>dds.transport.TCPv4.tcp1.create_function</name>
-                                <value>NDDS_Transport_TCPv4_create</value>
-                            </element>
-                            <element>
-                                <name>dds.transport.TCPv4.tcp1.parent.classid</name>
-                                <value>NDDS_TRANSPORT_CLASSID_TCPV4_WAN</value>
-                            </element>
-                            <element>
-                                <name>dds.transport.TCPv4.tcp1.connection_liveliness.enable</name>
-                                <value>1</value>
-                            </element>
-                            <element>
-                                <name>dds.transport.TCPv4.tcp1.connection_liveliness.lease_duration</name>
-                                <value>10</value>
-                            </element>
-                            <element>
-                                <name>dds.transport.TCPv4.tcp1.connection_liveliness.assertions_per_lease_duration</name>
-                                <value>4</value>
-                            </element>
-                            <element>
-                                <name>dds.transport.TCPv4.tcp1.server_bind_port</name>
-                                <value>0</value> <!-- changed to zero since we're not supporting inbound connections -->
-                            </element>
-                            <element>
-                                <name>dds.transport.TCPv4.tcp1.disable_nagle</name>
-                                <value>1</value>
-                            </element>
-                        </value>
-                    </property>
-                </participant_qos>
+				<participant_qos base_name="PulseQosLib::PiRS_WanQosProfile::ParticipantQoS"/>
             </participant>
 
             <session name="Session" enabled="true">
 
-                <auto_topic_route name="ForwardFromWan" enabled="true">
+                <auto_topic_route name="ForwardConfigFromWan" enabled="true">
                     <publish_with_original_info>true</publish_with_original_info>                    
                     <input participant="WanParticipant">
                         <allow_topic_name_filter>PatientConfigTopic</allow_topic_name_filter>
-                        <datareader_qos>
-                            <reliability>
-                                <kind>RELIABLE_RELIABILITY_QOS</kind>
-                            </reliability>
-                            <history>
-                                <kind>KEEP_LAST_HISTORY_QOS</kind>
-                                <depth>5</depth>
-                            </history>
-                            <!-- ToDo: update as required -->
-                        </datareader_qos>
+						<datareader_qos base_name="PulseQosLib::PiRS_WanQosProfile::ConfigTopicReader"/>
                     </input>
                     <output participant="LocalParticipant">
                         <allow_topic_name_filter>PatientConfigTopic</allow_topic_name_filter>
-                        <datawriter_qos>
-                            <publication_name>
-                                <name>PiLocalConfigWriter</name>
-                            </publication_name>
-                            <reliability>
-                                <kind>RELIABLE_RELIABILITY_QOS</kind>
-                            </reliability>
-                            <history>
-                                <kind>KEEP_LAST_HISTORY_QOS</kind>
-                                <depth>5</depth>
-                            </history>
-                        </datawriter_qos>
+                        <datawriter_qos base_name="PulseQosLib::PiRSLanQosProfile::ConfigTopicWriter"/>
                     </output>
                 </auto_topic_route>
 

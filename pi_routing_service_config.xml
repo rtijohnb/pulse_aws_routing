@@ -41,6 +41,17 @@
                 <!-- !!!ToDo: update as required -->
             </datareader_qos>
 
+            <datareader_qos name="InfoTopicReader">
+                <reliability>
+                    <kind>RELIABLE_RELIABILITY_QOS</kind>
+                </reliability>
+                <history>
+                    <kind>KEEP_LAST_HISTORY_QOS</kind>
+                    <depth>2</depth>
+                </history>
+                <!-- !!!ToDo: update as required -->
+            </datareader_qos>
+
         </qos_profile>
 
         <qos_profile name="PiRS_LanMonQosProfile" base_name="PiRS_LanQosProfile">
@@ -134,6 +145,34 @@
                 <!-- ToDo: update as required -->
             </datareader_qos>
 
+            <datawriter_qos name="PulseTopicWriter">
+                <publication_name>
+                    <name>PiWanPulseWriter</name>
+                </publication_name>
+                <reliability>
+                    <kind>RELIABLE_RELIABILITY_QOS</kind>
+                </reliability>
+                <history>
+                    <kind>KEEP_LAST_HISTORY_QOS</kind>
+                    <depth>100</depth>
+                </history>
+                <!-- !!!ToDo: update as required; this is going to the TCP tunnel so probably not much needed? -->
+            </datawriter_qos>
+
+            <datawriter_qos name="InfoTopicWriter">
+                <publication_name>
+                    <name>PiWanInfoWriter</name>
+                </publication_name>
+                <reliability>
+                    <kind>RELIABLE_RELIABILITY_QOS</kind>
+                </reliability>
+                <history>
+                    <kind>KEEP_LAST_HISTORY_QOS</kind>
+                    <depth>2</depth>
+                </history>
+                <!-- !!!ToDo: update as required; this is going to the TCP tunnel so probably not much needed? -->
+            </datawriter_qos>
+
         </qos_profile>
 
         <qos_profile name="PiRS_WanMonQosProfile" base_name="PiRS_WanQosProfile">
@@ -200,32 +239,11 @@
                     <publish_with_original_info>true</publish_with_original_info>
                     <input participant="LocalParticipant">
                         <allow_topic_name_filter>PatientPulseTopic</allow_topic_name_filter>
-                        <datareader_qos>
-                            <reliability>
-                                <kind>RELIABLE_RELIABILITY_QOS</kind>
-                            </reliability>
-                            <history>
-                                <kind>KEEP_LAST_HISTORY_QOS</kind>
-                                <depth>100</depth>
-                            </history>
-                            <!-- !!!ToDo: update as required -->
-                        </datareader_qos>
+                        <datareader_qos base_name="PulseQosLib::PiRSLanQosProfile::PulseTopicReader"/>
                     </input>
                     <output participant="WanParticipant">
                         <allow_topic_name_filter>PatientPulseTopic</allow_topic_name_filter>
-                        <datawriter_qos>
-                            <publication_name>
-                                <name>PiWanPulseWriter</name>
-                            </publication_name>
-                            <reliability>
-                                <kind>RELIABLE_RELIABILITY_QOS</kind>
-                            </reliability>
-                            <history>
-                                <kind>KEEP_LAST_HISTORY_QOS</kind>
-                                <depth>100</depth>
-                            </history>
-                            <!-- !!!ToDo: update as required; this is going to the TCP tunnel so probably not much needed? -->
-                        </datawriter_qos>
+                        <datawriter_qos base_name="PulseQosLib::PiRS_WanQosProfile::PulseTopicWriter"/>
                     </output>
                 </auto_topic_route>
 
@@ -233,32 +251,11 @@
                     <publish_with_original_info>true</publish_with_original_info>
                     <input participant="LocalParticipant">
                         <allow_topic_name_filter>PatientInfoTopic</allow_topic_name_filter>
-                        <datareader_qos>
-                            <reliability>
-                                <kind>RELIABLE_RELIABILITY_QOS</kind>
-                            </reliability>
-                            <history>
-                                <kind>KEEP_LAST_HISTORY_QOS</kind>
-                                <depth>2</depth>
-                            </history>
-                            <!-- !!!ToDo: update as required -->
-                        </datareader_qos>
+                        <datareader_qos base_name="PulseQosLib::PiRSLanQosProfile::InfoTopicReader"/>
                     </input>
                     <output participant="WanParticipant">
                         <allow_topic_name_filter>PatientInfoTopic</allow_topic_name_filter>
-                        <datawriter_qos>
-                            <publication_name>
-                                <name>PiWanInfoWriter</name>
-                            </publication_name>
-                            <reliability>
-                                <kind>RELIABLE_RELIABILITY_QOS</kind>
-                            </reliability>
-                            <history>
-                                <kind>KEEP_LAST_HISTORY_QOS</kind>
-                                <depth>2</depth>
-                            </history>
-                            <!-- !!!ToDo: update as required; this is going to the TCP tunnel so probably not much needed? -->
-                        </datawriter_qos>
+                        <datawriter_qos base_name="PulseQosLib::PiRS_WanQosProfile::InfoTopicWriter"/>
                     </output>
                 </auto_topic_route>
                 

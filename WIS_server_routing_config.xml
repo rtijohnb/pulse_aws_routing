@@ -37,7 +37,7 @@
                         </element>
                         <element>
                             <name>dds.transport.TCPv4.tcp1.public_address</name>
-                            <value>50.18.214.8:9900</value>
+                            <value>192.168.1.71:9900</value>
                         </element>
                         <element>
                             <name>dds.transport.TCPv4.tcp1.server_bind_port</name>
@@ -188,7 +188,7 @@
     <!-- Pi-local routing instance.                                                -->
     <!-- ************************************************************************* -->
 
-    <routing_service name="PulseWis">
+    <routing_service name="PulseAwsRS">
 	
         <annotation>
 		<documentation>Configuration for WIS-side routing service in the Pulse demo.</documentation>
@@ -257,7 +257,7 @@
     <!-- to a remote, Pi-local routing instance                                    -->
     <!-- ************************************************************************* -->
 
-    <routing_service name="PulseWisMon">
+    <routing_service name="PulseAwsRS_wMonitor">
 	
         <annotation>
 		<documentation>Configuration for WIS-side monitor-enabled routing service in the Pulse demo.</documentation>

@@ -175,6 +175,23 @@
 
         </qos_profile>
 
+        <qos_profile name="PiRS_LanMonQosProfile" base_name="PiRS_LanQosProfile">
+            <participant_qos name="ParticipantQoS"> 
+                <property> 
+                    <value> 
+                        <element> 
+                            <name>rti.monitor.library</name> 
+                            <value>rtimonitoring</value> 
+                        </element> 
+                        <element> 
+                            <name>rti.monitor.create_function</name> 
+                            <value>RTIDefaultMonitor_create</value> 
+                        </element> 
+                    </value> 
+                </property> 
+            </participant_qos> 
+        </qos_profile>
+
         <qos_profile name="PiRS_WanMonQosProfile" base_name="PiRS_WanQosProfile">
             <participant_qos name="ParticipantQoS"> 
                 <property> 
@@ -200,7 +217,7 @@
     <!-- a TCP-WAN connection to the cloud-based Web-Integration-Service server.   -->
     <!-- ************************************************************************* -->
 
-    <routing_service name="PulsePi">
+    <routing_service name="PulsePiRS">
 
         <annotation>
 		<documentation>Configuration for Pi-side routing service in the Pulse demo.</documentation>
@@ -231,7 +248,7 @@
                     </input>
                     <output participant="LocalParticipant">
                         <allow_topic_name_filter>PatientConfigTopic</allow_topic_name_filter>
-                        <datawriter_qos base_name="PulseQosLib::PiRSLanQosProfile::ConfigTopicWriter"/>
+                        <datawriter_qos base_name="PulseQosLib::PiRS_LanQosProfile::ConfigTopicWriter"/>
                     </output>
                 </auto_topic_route>
 
@@ -239,7 +256,7 @@
                     <publish_with_original_info>true</publish_with_original_info>
                     <input participant="LocalParticipant">
                         <allow_topic_name_filter>PatientPulseTopic</allow_topic_name_filter>
-                        <datareader_qos base_name="PulseQosLib::PiRSLanQosProfile::PulseTopicReader"/>
+                        <datareader_qos base_name="PulseQosLib::PiRS_LanQosProfile::PulseTopicReader"/>
                     </input>
                     <output participant="WanParticipant">
                         <allow_topic_name_filter>PatientPulseTopic</allow_topic_name_filter>
@@ -251,7 +268,7 @@
                     <publish_with_original_info>true</publish_with_original_info>
                     <input participant="LocalParticipant">
                         <allow_topic_name_filter>PatientInfoTopic</allow_topic_name_filter>
-                        <datareader_qos base_name="PulseQosLib::PiRSLanQosProfile::InfoTopicReader"/>
+                        <datareader_qos base_name="PulseQosLib::PiRS_LanQosProfile::InfoTopicReader"/>
                     </input>
                     <output participant="WanParticipant">
                         <allow_topic_name_filter>PatientInfoTopic</allow_topic_name_filter>
@@ -262,4 +279,74 @@
             </session>
         </domain_route>
     </routing_service>
+
+    <!-- ************************************************************************* -->
+    <!-- Routing service configuration file for use on the Pi (pulse monitor side) -->
+    <!-- of the Pulse demo.  This bridges between a local DDS domain on the Pi and -->
+    <!-- a TCP-WAN connection to the cloud-based Web-Integration-Service server.   -->
+    <!-- ************************************************************************* -->
+
+    <routing_service name="PulsePiRS_wMonitor">
+
+        <annotation>
+		<documentation>Configuration for Pi-side routing service in the Pulse demo.</documentation>
+		</annotation>
+
+        <!-- Enable remote administration of the routing service from some specified domain -->
+        <administration><domain_id>0</domain_id></administration>
+
+        <domain_route name="Route">
+
+            <participant name="LocalParticipant">
+                <domain_id>0</domain_id>
+				<participant_qos base_name="PulseQosLib::PiRS_LanMonQosProfile::ParticipantQoS"/>
+            </participant>
+
+            <participant name="WanParticipant">
+                <domain_id>10</domain_id>
+				<participant_qos base_name="PulseQosLib::PiRS_WanMonQosProfile::ParticipantQoS"/>
+            </participant>
+
+            <session name="Session" enabled="true">
+
+                <auto_topic_route name="ForwardConfigFromWan" enabled="true">
+                    <publish_with_original_info>true</publish_with_original_info>                    
+                    <input participant="WanParticipant">
+                        <allow_topic_name_filter>PatientConfigTopic</allow_topic_name_filter>
+						<datareader_qos base_name="PulseQosLib::PiRS_WanMonQosProfile::ConfigTopicReader"/>
+                    </input>
+                    <output participant="LocalParticipant">
+                        <allow_topic_name_filter>PatientConfigTopic</allow_topic_name_filter>
+                        <datawriter_qos base_name="PulseQosLib::PiRS_LanMonQosProfile::ConfigTopicWriter"/>
+                    </output>
+                </auto_topic_route>
+
+                <auto_topic_route name="ForwardPulseToWan" enabled="true">
+                    <publish_with_original_info>true</publish_with_original_info>
+                    <input participant="LocalParticipant">
+                        <allow_topic_name_filter>PatientPulseTopic</allow_topic_name_filter>
+                        <datareader_qos base_name="PulseQosLib::PiRS_LanMonQosProfile::PulseTopicReader"/>
+                    </input>
+                    <output participant="WanParticipant">
+                        <allow_topic_name_filter>PatientPulseTopic</allow_topic_name_filter>
+                        <datawriter_qos base_name="PulseQosLib::PiRS_WanMonQosProfile::PulseTopicWriter"/>
+                    </output>
+                </auto_topic_route>
+
+                <auto_topic_route name="ForwardInfoToWan" enabled="true">
+                    <publish_with_original_info>true</publish_with_original_info>
+                    <input participant="LocalParticipant">
+                        <allow_topic_name_filter>PatientInfoTopic</allow_topic_name_filter>
+                        <datareader_qos base_name="PulseQosLib::PiRS_LanMonQosProfile::InfoTopicReader"/>
+                    </input>
+                    <output participant="WanParticipant">
+                        <allow_topic_name_filter>PatientInfoTopic</allow_topic_name_filter>
+                        <datawriter_qos base_name="PulseQosLib::PiRS_WanMonQosProfile::InfoTopicWriter"/>
+                    </output>
+                </auto_topic_route>
+                
+            </session>
+        </domain_route>
+    </routing_service>
+
 </dds>

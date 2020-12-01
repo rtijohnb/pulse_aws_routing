@@ -4,7 +4,7 @@ then
      echo "     kill `ps axw|grep 'rtiroutingservice.*PulseAwsRS'|awk '{$1=$1}1'|cut -d ' ' -f 1|head -n 1`"
      exit
 fi
-set NDDS_QOS_PROFILES=file://home/ken/MedicalDemo.xml
+export NDDS_QOS_PROFILES=file://$PULSE_DEMO_HOME/pulse_sysdesigner/MedicalDemo.xml
 echo "Starting routing service"
 $NDDSHOME/bin/rtiroutingservice -cfgName PulseAwsRS &
 

@@ -9,14 +9,19 @@ Configuration files and related scripts for both routing instances used in the P
 **  Pi Routing Service (runs on or near/local-to the Pi)
 **  WIS Routing Service (runs on the AWS instance that hosts the WIS)
 
-Configuration files as follows:
-
-pi_routing_service_config.xml - configuration related to the Pi Routing Service described above.
-WIS_server_routing_config.xml - configuration related to the WIS Routing Service described above.
+All configurations are contained in the USER_ROUTING_SERVICE.xml file.
 
 Several script files have been placed in this directory to simplify running these routing services.
-In all cases, these scripts assume that the environment variable NDDSHOME is set appropriately for
-the host.
+In all cases, these scripts assume that certain environment variables are set appropriately for
+the host as follows:
+
+NDDSHOME: must be set to the name of the directory where connext is installed in the host environment.
+e.g. for linux: export NDDSHOME=/home/kenm/rti_connext_dds-6.0.1
+e.g. for Windows: setx NDDSHOME C:\RTI\rti_connext_dds-6.0.1 /m
+
+PULSE_DEMO_HOME: must be set to the name of the directory where the pulse repositories have been cloned in.
+e.g. for linux: export PULSE_DEMO_HOME=/home/kenm/repos/Pulse
+e.g. for Windows: setx PULSE_DEMO_HOME C:\users\kenm\repos\Pulse /m
 
 Scripts are as follows:
 "linuxRunPiRouting" - one-line script that can be used to start the Pi Routing Service on a linux host.

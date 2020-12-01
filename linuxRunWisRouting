@@ -1,9 +1,10 @@
-if [ 2 -eq `ps auxw|grep 'rtiroutingservice.*PulseWis'|wc -l` ];
+if [ 2 -eq `ps auxw|grep 'rtiroutingservice.*PulseAwsRS'|wc -l` ];
 then
      echo "It looks like routing service is already running, try killing it first"
-     echo "     kill `ps axw|grep 'rtiroutingservice.*PulseWis'|awk '{$1=$1}1'|cut -d ' ' -f 1|head -n 1`"
+     echo "     kill `ps axw|grep 'rtiroutingservice.*PulseAwsRS'|awk '{$1=$1}1'|cut -d ' ' -f 1|head -n 1`"
      exit
 fi
+set NDDS_QOS_PROFILES=file://home/ken/MedicalDemo.xml
 echo "Starting routing service"
-$NDDSHOME/bin/rtiroutingservice -cfgName PulseWis &
+$NDDSHOME/bin/rtiroutingservice -cfgName PulseAwsRS &
 

@@ -1,2 +1,3 @@
-$NDDSHOME/bin/rtiroutingservice -cfgName PulseWis 
+set NDDS_QOS_PROFILES=file://home/ken/MedicalDemo.xml
+$NDDSHOME/bin/rtiroutingservice -cfgName PulsePiRS 
 

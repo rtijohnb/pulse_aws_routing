@@ -144,4 +144,142 @@
         </domain_route>
     </routing_service>
 
+    <!-- ************************************************************************* -->
+    <!-- Routing service configuration file for use on the AWS instance used to    -->
+    <!-- host the WIS instance for the Pulse demo.  This bridges between a local   -->
+    <!-- DDS domain on the AWS instance and a TCP-WAN connection to a remote,      -->
+    <!-- Pi-local routing instance.                                                -->
+    <!-- ************************************************************************* -->
+
+    <routing_service name="PulseAwsRS">
+	
+        <annotation>
+		<documentation>Configuration for WIS-side routing service in the Pulse demo.</documentation>
+		</annotation>
+
+        <!-- Enable remote administration of the routing service from some specified domain -->
+        <administration><domain_id>0</domain_id></administration>
+
+        <domain_route name="Route">
+
+            <participant name="WanParticipant">
+                <domain_id>10</domain_id>
+				<participant_qos base_name="RTI_Eval_Qos_Library_1_0::WisRS_WanQosProfile::ParticipantQos"/>
+            </participant>
+
+            <participant name="LocalParticipant">
+                <domain_id>20</domain_id>
+				<participant_qos base_name="RTI_Eval_Qos_Library_1_0::WisRS_LanQosProfile::ParticipantQos"/>
+            </participant>
+
+            <session name="Session" enabled="true">
+
+                <auto_topic_route name="ForwardConfigToPi" enabled="true">
+                    <publish_with_original_info>true</publish_with_original_info>                    
+                    <input participant="LocalParticipant">
+                        <allow_topic_name_filter>PatientConfigTopic</allow_topic_name_filter>
+                        <datareader_qos base_name="RTI_Eval_Qos_Library_1_0::WisRS_LanQosProfile::ConfigTopicReader"/>
+                    </input>
+                    <output participant="WanParticipant">
+                        <allow_topic_name_filter>PatientConfigTopic</allow_topic_name_filter>
+                        <datawriter_qos base_name="RTI_Eval_Qos_Library_1_0::WisRS_WanQosProfile::ConfigTopicWriter"/>
+                    </output>
+                </auto_topic_route>
+
+                <auto_topic_route name="ForwardPulseFromPi" enabled="true">
+                    <publish_with_original_info>true</publish_with_original_info>
+                    <input participant="WanParticipant">
+                        <allow_topic_name_filter>PatientPulseTopic</allow_topic_name_filter>
+                        <datareader_qos base_name="RTI_Eval_Qos_Library_1_0::WisRS_WanQosProfile::PulseTopicReader"/>
+                    </input>
+                    <output participant="LocalParticipant">
+                        <allow_topic_name_filter>PatientPulseTopic</allow_topic_name_filter>
+                        <datawriter_qos base_name="RTI_Eval_Qos_Library_1_0::WisRS_LanQosProfile::PulseTopicWriter"/>
+                    </output>
+                </auto_topic_route>
+				
+                <auto_topic_route name="ForwardInfoFromPi" enabled="true">
+                    <input participant="WanParticipant">
+                        <allow_topic_name_filter>PatientInfoTopic</allow_topic_name_filter>
+                        <datareader_qos base_name="RTI_Eval_Qos_Library_1_0::WisRS_WanQosProfile::InfoTopicReader"/>
+                    </input>
+                    <output participant="LocalParticipant">
+                        <allow_topic_name_filter>PatientInfoTopic</allow_topic_name_filter>
+                        <datawriter_qos base_name="RTI_Eval_Qos_Library_1_0::WisRS_LanQosProfile::InfoTopicWriter"/>
+                    </output>
+                </auto_topic_route>
+
+            </session>
+        </domain_route>
+    </routing_service>
+
+    <!-- ************************************************************************* -->
+    <!-- Monitor-enabled Routing Service configuration file for use on the AWS     -->
+    <!-- instance used to host the WIS instance for the Pulse demo.  This bridges  -->
+    <!-- between a local DDS domain on the AWS instance and a TCP-WAN connection   -->
+    <!-- to a remote, Pi-local routing instance                                    -->
+    <!-- ************************************************************************* -->
+
+    <routing_service name="PulseAwsRS_wMonitor">
+	
+        <annotation>
+		<documentation>Configuration for WIS-side monitor-enabled routing service in the Pulse demo.</documentation>
+		</annotation>
+
+        <!-- Enable remote administration of the routing service from some specified domain -->
+        <administration><domain_id>0</domain_id></administration> <!-- !!!ToDo: Not sure if we want this at all... -->
+
+        <domain_route name="Route">
+
+            <participant name="WanParticipant">
+                <domain_id>10</domain_id>
+				<participant_qos base_name="RTI_Eval_Qos_Library_1_0::WisRS_WanMonQosProfile::ParticipantQos"/>
+            </participant>
+
+            <participant name="LocalParticipant">
+                <domain_id>20</domain_id>
+				<participant_qos base_name="RTI_Eval_Qos_Library_1_0::WisRS_LanMonQosProfile::ParticipantQos"/>
+            </participant>
+
+            <session name="Session" enabled="true">
+
+                <auto_topic_route name="ForwardConfigToPi" enabled="true">
+                    <publish_with_original_info>true</publish_with_original_info>                    
+                    <input participant="LocalParticipant">
+                        <allow_topic_name_filter>PatientConfigTopic</allow_topic_name_filter>
+                        <datareader_qos base_name="RTI_Eval_Qos_Library_1_0::WisRS_LanQosProfile::ConfigTopicReader"/>
+                    </input>
+                    <output participant="WanParticipant">
+                        <allow_topic_name_filter>PatientConfigTopic</allow_topic_name_filter>
+                        <datawriter_qos base_name="RTI_Eval_Qos_Library_1_0::WisRS_WanQosProfile::ConfigTopicWriter"/>
+                    </output>
+                </auto_topic_route>
+
+                <auto_topic_route name="ForwardPulseFromPi" enabled="true">
+                    <publish_with_original_info>true</publish_with_original_info>
+                    <input participant="WanParticipant">
+                        <allow_topic_name_filter>PatientPulseTopic</allow_topic_name_filter>
+                        <datareader_qos base_name="RTI_Eval_Qos_Library_1_0::WisRS_WanQosProfile::PulseTopicReader"/>
+                    </input>
+                    <output participant="LocalParticipant">
+                        <allow_topic_name_filter>PatientPulseTopic</allow_topic_name_filter>
+                        <datawriter_qos base_name="RTI_Eval_Qos_Library_1_0::WisRS_LanQosProfile::PulseTopicWriter"/>
+                    </output>
+                </auto_topic_route>
+				
+                <auto_topic_route name="ForwardInfoFromPi" enabled="true">
+                    <input participant="WanParticipant">
+                        <allow_topic_name_filter>PatientInfoTopic</allow_topic_name_filter>
+                        <datareader_qos base_name="RTI_Eval_Qos_Library_1_0::WisRS_WanQosProfile::InfoTopicReader"/>
+                    </input>
+                    <output participant="LocalParticipant">
+                        <allow_topic_name_filter>PatientInfoTopic</allow_topic_name_filter>
+                        <datawriter_qos base_name="RTI_Eval_Qos_Library_1_0::WisRS_LanQosProfile::InfoTopicWriter"/>
+                    </output>
+                </auto_topic_route>
+
+            </session>
+        </domain_route>
+    </routing_service>
+
 </dds>

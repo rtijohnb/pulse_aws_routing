@@ -1,4 +1,4 @@
 @echo off
+set NDDS_QOS_PROFILES=file://C:/users/kenm/repos/Pulse/pulse_sysdesigner/MedicalDemo.xml
 "%NDDSHOME%/bin/rtiroutingservice.bat" ^
-  -cfgFile WIS_server_routing_config.xml ^
   -cfgName PulseAwsRS ^
